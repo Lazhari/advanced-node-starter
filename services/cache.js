@@ -38,7 +38,13 @@ mongoose.Query.prototype.exec = async function() {
   // Otherwise, issue the query and store the result in redis
   const result = await exec.apply(this, arguments);
 
-  client.hset(this.hashKey, key, JSON.stringify(result), "EX", 10);
+  client.hset(this.hashKey, key, JSON.stringify(result), "EX", 60 * 60);
 
   return result;
+};
+
+module.exports = {
+  clearHash(hashKey) {
+    client.del(JSON.stringify(hashKey));
+  }
 };
