@@ -11,7 +11,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((id, done) => {
   User.findById(id)
-    .cache()
+    .cache({ key: id })
     .then(user => {
       done(null, user);
     });
